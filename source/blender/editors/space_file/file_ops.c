@@ -1719,7 +1719,6 @@ static int filepath_drop_exec(bContext *C, wmOperator *op)
 			file_draw_check(C);
 		}
 
-
 FileSelectParams *params = ED_fileselect_get_params(sfile);
 
 
@@ -1738,7 +1737,7 @@ const struct FileDirEntry *file = filelist_file(sfile->files, params->highlight_
 
 
 
-if (file->typeflag & FILE_TYPE_DIR) {	
+if (file && file->typeflag & FILE_TYPE_DIR) {	
 	             BLI_strncpy(file2, file->relpath, FILE_MAX);
 
  		char* str1 = strdup(filepath);
@@ -1766,7 +1765,7 @@ if (file->typeflag & FILE_TYPE_DIR) {
                 strcpy (str, filepath2);
                 strcat (str, filename2);
 
- rename(filepath, str);  
+rename(filepath, str);  
 
 
                
@@ -1781,6 +1780,7 @@ if (file->typeflag & FILE_TYPE_DIR) {
 	fsmenu_refresh_system_category(fsmenu);
                 
     }            
+
 
 
 
