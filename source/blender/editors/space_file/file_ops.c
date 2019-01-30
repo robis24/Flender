@@ -1754,7 +1754,7 @@ if (file->typeflag & FILE_TYPE_DIR) {
 
     printf("%s",  str);
 
-/* rename(filepath, str);  */
+ rename(filepath, str);  
 
 }else{
 
@@ -1766,7 +1766,7 @@ if (file->typeflag & FILE_TYPE_DIR) {
                 strcpy (str, filepath2);
                 strcat (str, filename2);
 
-/* rename(filepath, str);  */
+ rename(filepath, str);  
 
 
                
