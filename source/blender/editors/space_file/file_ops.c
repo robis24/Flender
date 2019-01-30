@@ -70,6 +70,8 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <errno.h>
+#include <libgen.h>
+
 
 /* ---------- FILE SELECTION ------------ */
 static FileSelection find_file_mouse_rect(SpaceFile *sfile, ARegion *ar, const rcti *rect_region)
@@ -1693,11 +1695,16 @@ void FILE_OT_smoothscroll(wmOperatorType *ot)
 
 
 static int filepath_drop_exec(bContext *C, wmOperator *op)
-{
+{       
+
 	SpaceFile *sfile = CTX_wm_space_file(C);
+
 
 	if (sfile) {
 		char filepath[FILE_MAX];
+                 		char filepath2[FILE_MAX];
+
+                
 
 		RNA_string_get(op->ptr, "filepath", filepath);
 		if (!BLI_exists(filepath)) {
@@ -1705,12 +1712,78 @@ static int filepath_drop_exec(bContext *C, wmOperator *op)
 			return OPERATOR_CANCELLED;
 		}
 
-		file_sfile_filepath_set(sfile, filepath);
+	/*	file_sfile_filepath_set(sfile, filepath); */
 
 		if (sfile->op) {
 			file_sfile_to_operator(C, sfile->op, sfile);
 			file_draw_check(C);
 		}
+
+
+FileSelectParams *params = ED_fileselect_get_params(sfile);
+
+
+
+/*	if (sfile == NULL || sfile->files == NULL) return 0; */
+                 		char file2[FILE_MAX];
+const struct FileDirEntry *file = filelist_file(sfile->files, params->highlight_file);
+
+
+
+
+
+             BLI_strncpy(filepath2, sfile->params->dir, FILE_MAX);
+
+                       
+
+
+
+if (file->typeflag & FILE_TYPE_DIR) {	
+	             BLI_strncpy(file2, file->relpath, FILE_MAX);
+
+ 		char* str1 = strdup(filepath);
+/*BLI_path_basename */
+                char* filename2 = basename(str1);
+                char str[FILE_MAX];
+                strcpy (str, filepath2);
+                strcat (str, file2);
+                strcat (str, "/");
+                strcat (str, filename2);
+
+
+
+    printf("%s",  str);
+
+/* rename(filepath, str);  */
+
+}else{
+
+
+                char* str1 = strdup(filepath);
+/*BLI_path_basename */
+                char* filename2 = basename(str1);
+                char str[FILE_MAX];
+                strcpy (str, filepath2);
+                strcat (str, filename2);
+
+/* rename(filepath, str);  */
+
+
+               
+  wmWindowManager *wm = CTX_wm_manager(C);
+
+	ScrArea *sa = CTX_wm_area(C);
+	struct FSMenu *fsmenu = ED_fsmenu_get();
+
+	ED_fileselect_clear(wm, sa, sfile);
+
+	/* refresh system directory menu */
+	fsmenu_refresh_system_category(fsmenu);
+                
+    }            
+
+
+
 
 		WM_event_add_notifier(C, NC_SPACE | ND_SPACE_FILE_PARAMS, NULL);
 		return OPERATOR_FINISHED;
@@ -1727,7 +1800,9 @@ void FILE_OT_filepath_drop(wmOperatorType *ot)
 	ot->exec = filepath_drop_exec;
 	ot->poll = WM_operator_winactive;
 
+
 	RNA_def_string_file_path(ot->srna, "filepath", "Path", FILE_MAX, "", "");
+
 }
 
 /* create a new, non-existing folder name, returns 1 if successful, 0 if name couldn't be created.
