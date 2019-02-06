@@ -603,15 +603,28 @@ static bool filepath_drop_poll(bContext *C, wmDrag *drag, const wmEvent *UNUSED(
 	if (drag->type == WM_DRAG_PATH) {
 		SpaceFile *sfile = CTX_wm_space_file(C);
 		if (sfile) {
+
+
+
+
 			return 1;
 		}
 	}
 	return 0;
 }
 
-static void filepath_drop_copy(wmDrag *drag, wmDropBox *drop)
+static void filepath_drop_copy(wmDrag *drag, wmDropBox *drop )
 {
-	RNA_string_set(drop->ptr, "filepath", drag->path);
+
+         
+	/* RNA_string_set(drop->ptr, "filepath", drag->path); */
+        RNA_string_set(drop->ptr, "filepath", drag->path);
+       drop->ot->window= drag->window; 
+int za = (int)drop->ot->window;
+int za2 = (int)drag->window;
+          printf("drag -: %d",  za2);                     
+       printf("drop copy--: 0x%x\n",  za);                     
+       printf("drop pointer: %s 0x%x\n",  drop->ot->name, drop);
 }
 
 /* region dropbox definition */

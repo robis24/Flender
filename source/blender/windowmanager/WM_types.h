@@ -555,6 +555,8 @@ typedef struct wmOperatorType {
 	const char *description;	/* tooltips and python docs */
 	const char *undo_group;	/* identifier to group operators together */
 
+
+
 	/* this callback executes the operator without any interactive input,
 	 * parameters may be provided through operator properties. cannot use
 	 * any interface code or input device state.
@@ -621,6 +623,11 @@ typedef struct wmOperatorType {
 	/* Flag last for padding */
 	short flag;
 
+
+                int window, padzz[3];
+
+
+
 } wmOperatorType;
 
 #ifdef WITH_INPUT_IME
@@ -674,6 +681,13 @@ typedef struct wmDrag {
 	void *poin;
 	char path[1024]; /* FILE_MAX */
 	double value;
+        
+
+
+       
+
+
+
 
 	struct ImBuf *imb;						/* if no icon but imbuf should be drawn around cursor */
 	float scale;
@@ -683,6 +697,9 @@ typedef struct wmDrag {
 	unsigned int flags;
 
 	ListBase ids; /* List of wmDragIDs, all are guaranteed to have the same ID type. */
+
+         int window, padzz[3];
+
 } wmDrag;
 
 /* dropboxes are like keymaps, part of the screen/area/region definition */
@@ -703,7 +720,7 @@ typedef struct wmDropBox {
 	struct PointerRNA *ptr;			/* rna pointer to access properties */
 
 	short opcontext;				/* default invoke */
-
+        int window, padzz[3];
 } wmDropBox;
 
 /**

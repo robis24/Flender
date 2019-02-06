@@ -60,6 +60,10 @@
 #include "WM_types.h"
 #include "wm_event_system.h"
 
+
+
+
+
 /* ****************************************************** */
 
 static ListBase dropboxes = {NULL, NULL};
@@ -110,6 +114,7 @@ wmDropBox *WM_dropbox_add(
 	drop->ot = WM_operatortype_find(idname, 0);
 	drop->opcontext = WM_OP_INVOKE_DEFAULT;
 
+
 	if (drop->ot == NULL) {
 		MEM_freeN(drop);
 		printf("Error: dropbox with unknown operator: %s\n", idname);
@@ -147,6 +152,11 @@ void wm_dropbox_free(void)
 wmDrag *WM_event_start_drag(struct bContext *C, int icon, int type, void *poin, double value, unsigned int flags)
 {
 	wmWindowManager *wm = CTX_wm_manager(C);
+
+      ScrArea *sa = CTX_wm_area(C);
+
+
+
 	wmDrag *drag = MEM_callocN(sizeof(struct wmDrag), "new drag");
 
 	/* keep track of future multitouch drag too, add a mousepointer id or so */
@@ -156,8 +166,11 @@ wmDrag *WM_event_start_drag(struct bContext *C, int icon, int type, void *poin, 
 	drag->flags = flags;
 	drag->icon = icon;
 	drag->type = type;
+
 	if (type == WM_DRAG_PATH) {
+             drag->window = (int)sa;
 		BLI_strncpy(drag->path, poin, FILE_MAX);
+                printf("%d", (int)sa);
 	}
 	else if (type == WM_DRAG_ID) {
 		if (poin) {

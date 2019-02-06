@@ -483,6 +483,7 @@ typedef struct wmOperator {
 	/** Runtime for drawing. */
 	struct uiLayout *layout;
 	short flag, pad[3];
+        int window, padzz[3];
 } wmOperator;
 
 /* operator type return flags: exec(), invoke() modal(), return values */

@@ -1698,14 +1698,17 @@ static int filepath_drop_exec(bContext *C, wmOperator *op)
 {       
 
 	SpaceFile *sfile = CTX_wm_space_file(C);
-
+        
 
 	if (sfile) {
 		char filepath[FILE_MAX];
                  		char filepath2[FILE_MAX];
 
-                
+                	/* ScrArea *za = (ScrArea*) op->window; */
 
+       printf("-op pointer: 0x%x\n",  op);
+                         printf("%s\n",  op->type->name);
+			printf("op-type: %d, op: %d\n",  op->type->window, op->window);
 		RNA_string_get(op->ptr, "filepath", filepath);
 		if (!BLI_exists(filepath)) {
 			BKE_report(op->reports, RPT_ERROR, "File does not exist");
@@ -1714,10 +1717,10 @@ static int filepath_drop_exec(bContext *C, wmOperator *op)
 
 	/*	file_sfile_filepath_set(sfile, filepath); */
 
-		if (sfile->op) {
+	/*	if (sfile->op) {
 			file_sfile_to_operator(C, sfile->op, sfile);
 			file_draw_check(C);
-		}
+		}    */
 
 FileSelectParams *params = ED_fileselect_get_params(sfile);
 
@@ -1726,6 +1729,9 @@ FileSelectParams *params = ED_fileselect_get_params(sfile);
 /*	if (sfile == NULL || sfile->files == NULL) return 0; */
                  		char file2[FILE_MAX];
 const struct FileDirEntry *file = filelist_file(sfile->files, params->highlight_file);
+
+
+
 
 
 
@@ -1751,7 +1757,7 @@ if (file && file->typeflag & FILE_TYPE_DIR) {
 
 
 
-    printf("%s",  str);
+  /*  printf("%s",  str); */
 
  rename(filepath, str);  
 
@@ -1772,12 +1778,12 @@ rename(filepath, str);
   wmWindowManager *wm = CTX_wm_manager(C);
 
 	ScrArea *sa = CTX_wm_area(C);
-	struct FSMenu *fsmenu = ED_fsmenu_get();
-
+	/* struct FSMenu *fsmenu = ED_fsmenu_get(); */
+        
 	ED_fileselect_clear(wm, sa, sfile);
-
-	/* refresh system directory menu */
-	fsmenu_refresh_system_category(fsmenu);
+       /*  	ED_fileselect_clear(wm, za, sfile);
+	refresh system directory menu
+	fsmenu_refresh_system_category(fsmenu);  */
                 
     }            
 
@@ -1800,8 +1806,9 @@ void FILE_OT_filepath_drop(wmOperatorType *ot)
 	ot->exec = filepath_drop_exec;
 	ot->poll = WM_operator_winactive;
 
-
+        printf("hallo \n");
 	RNA_def_string_file_path(ot->srna, "filepath", "Path", FILE_MAX, "", "");
+        
 
 }
 
