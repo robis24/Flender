@@ -1692,6 +1692,66 @@ void FILE_OT_smoothscroll(wmOperatorType *ot)
 
 	ot->poll = ED_operator_file_active;
 }
+int refrsh();
+int refrsh(bContext *C, SpaceFile *zfile, SpaceFile *sfile ){
+               
+  wmWindowManager *wm = CTX_wm_manager(C);
+
+	ScrArea *sa = CTX_wm_area(C);
+
+
+
+
+	/* struct FSMenu *fsmenu = ED_fsmenu_get(); */
+        
+	ED_fileselect_clear(wm, sa, sfile);
+         	ED_fileselect_clear(wm, sa, zfile);
+       /*  	ED_fileselect_clear(wm, za, sfile);
+	refresh system directory menu
+	fsmenu_refresh_system_category(fsmenu);  */
+
+        return 0;
+}
+
+
+int move();
+int move(char *source, char *target ) {
+        int ch;
+        FILE *fp1, *fp2;
+
+
+       
+
+        /* open the source file in read mode */
+        fp1 = fopen(source, "r");
+        /* open the destination file in write mode */
+        fp2 = fopen(target, "w");
+
+        /* error handling */
+        if (!fp1) {
+                printf("Unable to open source file to read!!\n");
+                fclose(fp2);
+                return 0;
+        }
+
+        if (!fp2) {
+                printf("Unable to open target file to write\n");
+                return 0;
+        }
+
+        /* copying contents of source file to target file */
+        while ((ch = fgetc(fp1)) != EOF) {
+                fputc(ch, fp2);
+        }
+
+        /* closing the opened files */
+        fclose(fp1);
+        fclose(fp2);
+
+        /* removing the source file */
+        remove(source);
+        return 0;
+  }
 
 
 static int filepath_drop_exec(bContext *C, wmOperator *op)
@@ -1705,15 +1765,15 @@ static int filepath_drop_exec(bContext *C, wmOperator *op)
                  		char filepath2[FILE_MAX];
                                                        		char filepath3[FILE_MAX];
                                                        		char filepath4[FILE_MAX];
+        char source[FILE_MAX], target[FILE_MAX];
+
 
 	SpaceFile *zfile = (SpaceFile *)op->type->window;
 
 		int numfiles = filelist_files_ensure(zfile->files);
      /*        BLI_strncpy(filepath3, zfile->params->dir, FILE_MAX); */
 
-
-
-
+       
 
 
 
@@ -1797,23 +1857,8 @@ if (file && file->typeflag & FILE_TYPE_DIR) {
                 strcat (str, filename2);
 
 rename(filepath, str);  
+refrsh(C, zfile, sfile);
 
-
-               
-  wmWindowManager *wm = CTX_wm_manager(C);
-
-	ScrArea *sa = CTX_wm_area(C);
-
-
-
-
-	/* struct FSMenu *fsmenu = ED_fsmenu_get(); */
-        
-	ED_fileselect_clear(wm, sa, sfile);
-         	ED_fileselect_clear(wm, sa, zfile);
-       /*  	ED_fileselect_clear(wm, za, sfile);
-	refresh system directory menu
-	fsmenu_refresh_system_category(fsmenu);  */
                 
     }            
 
@@ -1884,54 +1929,14 @@ if (file && file->typeflag & FILE_TYPE_DIR) {
                 strcpy (target1, filepath2);
                 strcat (target1, zzzfile->name);
                  
-
-                printf("%s", filepath4); 
-                printf("%s", zzzfile->name);
-                printf("%s", "|naar|"); 
-                printf("%s", filepath2); 
-                printf("%s", zzzfile->name);  
-
-
- int move() {
-        int ch;
-        FILE *fp1, *fp2;
-        char source[FILE_MAX], target[FILE_MAX];
-
-        strcpy(source, source1);
+ strcpy(source, source1);
         strcpy(target, target1);
+                
 
-        /* open the source file in read mode */
-        fp1 = fopen(source, "r");
-        /* open the destination file in write mode */
-        fp2 = fopen(target, "w");
 
-        /* error handling */
-        if (!fp1) {
-                printf("Unable to open source file to read!!\n");
-                fclose(fp2);
-                return 0;
-        }
+ 
+move(source, target);
 
-        if (!fp2) {
-                printf("Unable to open target file to write\n");
-                return 0;
-        }
-
-        /* copying contents of source file to target file */
-        while ((ch = fgetc(fp1)) != EOF) {
-                fputc(ch, fp2);
-        }
-
-        /* closing the opened files */
-        fclose(fp1);
-        fclose(fp2);
-
-        /* removing the source file */
-        remove(source);
-        return 0;
-  }
-
-move();
 
 }               
                      
@@ -1939,6 +1944,7 @@ move();
 }
 
 }
+refrsh(C, zfile, sfile);
 }                     
 
 
