@@ -153,7 +153,7 @@ wmDrag *WM_event_start_drag(struct bContext *C, int icon, int type, void *poin, 
 {
 	wmWindowManager *wm = CTX_wm_manager(C);
 
-      ScrArea *sa = CTX_wm_area(C);
+
 
 
 
@@ -168,9 +168,9 @@ wmDrag *WM_event_start_drag(struct bContext *C, int icon, int type, void *poin, 
 	drag->type = type;
 
 	if (type == WM_DRAG_PATH) {
-             drag->window = (int)sa;
+             drag->window = CTX_wm_space_data(C);
 		BLI_strncpy(drag->path, poin, FILE_MAX);
-                printf("%d", (int)sa);
+                printf("%d", CTX_wm_space_data(C));
 	}
 	else if (type == WM_DRAG_ID) {
 		if (poin) {

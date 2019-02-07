@@ -624,7 +624,7 @@ typedef struct wmOperatorType {
 	short flag;
 
 
-                int window, padzz[3];
+        struct wmSpaceData *window;
 
 
 
@@ -698,7 +698,7 @@ typedef struct wmDrag {
 
 	ListBase ids; /* List of wmDragIDs, all are guaranteed to have the same ID type. */
 
-         int window, padzz[3];
+        struct wmSpaceData *window;
 
 } wmDrag;
 
@@ -720,7 +720,7 @@ typedef struct wmDropBox {
 	struct PointerRNA *ptr;			/* rna pointer to access properties */
 
 	short opcontext;				/* default invoke */
-        int window, padzz[3];
+        struct wmSpaceData *window;
 } wmDropBox;
 
 /**

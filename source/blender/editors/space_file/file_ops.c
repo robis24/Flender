@@ -1703,13 +1703,47 @@ static int filepath_drop_exec(bContext *C, wmOperator *op)
 	if (sfile) {
 		char filepath[FILE_MAX];
                  		char filepath2[FILE_MAX];
+                                                       		char filepath3[FILE_MAX];
 
-                	/* ScrArea *za = (ScrArea*) op->window; */
+	SpaceFile *zfile = (SpaceFile *)op->type->window;
 
-       printf("-op pointer: 0x%x\n",  op);
+		int numfiles = filelist_files_ensure(zfile->files);
+     /*        BLI_strncpy(filepath3, zfile->params->dir, FILE_MAX); */
+
+
+
+
+FileDirEntry *zzzfile;
+
+	int i;
+
+	
+	for (i = 0; i < numfiles; i++) {
+		if (filelist_entry_select_index_get(zfile->files, i, CHECK_FILES)) {
+			zzzfile = filelist_file(zfile->files, i);
+
+                printf("%s", zzzfile->relpath);      
+                      }
+
+}
+/*
+
+FileSelectParams *zparams = ED_fileselect_get_params(zfile);
+                	
+const struct FileDirEntry *zffile = filelist_file(zfile->files, zparams->sel_last);
+if (zffile && zffile->typeflag & FILE_SEL_SELECTED) {
+                printf("%s", zffile->relpath);      
+}; 
+
+                printf("%d", numfiles);      */
+
+
+    /*   printf("-op pointer: 0x%x\n",  op);
                          printf("%s\n",  op->type->name);
-			printf("op-type: %d, op: %d\n",  op->type->window, op->window);
+			printf("op-type: %d, op: %d\n",  op->type->window, op->window); */
+
 		RNA_string_get(op->ptr, "filepath", filepath);
+
 		if (!BLI_exists(filepath)) {
 			BKE_report(op->reports, RPT_ERROR, "File does not exist");
 			return OPERATOR_CANCELLED;
@@ -1778,9 +1812,14 @@ rename(filepath, str);
   wmWindowManager *wm = CTX_wm_manager(C);
 
 	ScrArea *sa = CTX_wm_area(C);
+
+
+
+
 	/* struct FSMenu *fsmenu = ED_fsmenu_get(); */
         
 	ED_fileselect_clear(wm, sa, sfile);
+         	ED_fileselect_clear(wm, sa, zfile);
        /*  	ED_fileselect_clear(wm, za, sfile);
 	refresh system directory menu
 	fsmenu_refresh_system_category(fsmenu);  */

@@ -620,11 +620,11 @@ static void filepath_drop_copy(wmDrag *drag, wmDropBox *drop )
 	/* RNA_string_set(drop->ptr, "filepath", drag->path); */
         RNA_string_set(drop->ptr, "filepath", drag->path);
        drop->ot->window= drag->window; 
-int za = (int)drop->ot->window;
-int za2 = (int)drag->window;
+/*int za = (long)drop->ot->window;
+int za2 = (long)drag->window;
           printf("drag -: %d",  za2);                     
        printf("drop copy--: 0x%x\n",  za);                     
-       printf("drop pointer: %s 0x%x\n",  drop->ot->name, drop);
+       printf("drop pointer: %s 0x%x\n",  drop->ot->name, drop); */
 }
 
 /* region dropbox definition */
