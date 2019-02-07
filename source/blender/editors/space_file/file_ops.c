@@ -1704,6 +1704,7 @@ static int filepath_drop_exec(bContext *C, wmOperator *op)
 		char filepath[FILE_MAX];
                  		char filepath2[FILE_MAX];
                                                        		char filepath3[FILE_MAX];
+                                                       		char filepath4[FILE_MAX];
 
 	SpaceFile *zfile = (SpaceFile *)op->type->window;
 
@@ -1713,19 +1714,9 @@ static int filepath_drop_exec(bContext *C, wmOperator *op)
 
 
 
-FileDirEntry *zzzfile;
 
-	int i;
 
-	
-	for (i = 0; i < numfiles; i++) {
-		if (filelist_entry_select_index_get(zfile->files, i, CHECK_FILES)) {
-			zzzfile = filelist_file(zfile->files, i);
 
-                printf("%s", zzzfile->relpath);      
-                      }
-
-}
 /*
 
 FileSelectParams *zparams = ED_fileselect_get_params(zfile);
@@ -1766,15 +1757,15 @@ const struct FileDirEntry *file = filelist_file(sfile->files, params->highlight_
 
 
 
-
+             BLI_strncpy(filepath4, zfile->params->dir, FILE_MAX);  
 
 
 
 
              BLI_strncpy(filepath2, sfile->params->dir, FILE_MAX);
 
-                       
-
+  if(!file_is_any_selected(zfile->files)){
+ printf("%s", "no file selcted");   
 
 
 if (file && file->typeflag & FILE_TYPE_DIR) {	
@@ -1825,6 +1816,133 @@ rename(filepath, str);
 	fsmenu_refresh_system_category(fsmenu);  */
                 
     }            
+
+
+
+
+
+
+
+
+
+
+      
+}else{
+
+
+FileDirEntry *zzzfile;
+
+	int i;
+
+	
+	for (i = 0; i < numfiles; i++) {
+		if (filelist_entry_select_index_get(zfile->files, i, CHECK_FILES)) {
+			zzzfile = filelist_file(zfile->files, i);
+
+
+
+if (file && file->typeflag & FILE_TYPE_DIR) {	
+	             BLI_strncpy(file2, file->relpath, FILE_MAX);
+
+
+/*BLI_path_basename */
+
+/*
+                char str[FILE_MAX];
+                strcpy (str, filepath2);
+                strcat (str, file2);
+                strcat (str, "/");
+                strcat (str, filename2);  
+
+*/
+
+                printf("%s", filepath4); 
+                printf("%s", zzzfile->name);
+                printf("%s", "|naar|"); 
+                printf("%s", filepath4);
+                 printf("%s", file2);
+                  printf("%s", "/");
+                printf("%s", zzzfile->name);  
+
+
+  /*  printf("%s",  str); 
+
+ rename(filepath, str);  */
+
+}else{
+
+
+
+
+
+
+                char source1[FILE_MAX];
+                strcpy (source1, filepath4);
+                strcat (source1, zzzfile->name);
+
+                 char target1[FILE_MAX];
+                strcpy (target1, filepath2);
+                strcat (target1, zzzfile->name);
+                 
+
+                printf("%s", filepath4); 
+                printf("%s", zzzfile->name);
+                printf("%s", "|naar|"); 
+                printf("%s", filepath2); 
+                printf("%s", zzzfile->name);  
+
+
+ int move() {
+        int ch;
+        FILE *fp1, *fp2;
+        char source[FILE_MAX], target[FILE_MAX];
+
+        strcpy(source, source1);
+        strcpy(target, target1);
+
+        /* open the source file in read mode */
+        fp1 = fopen(source, "r");
+        /* open the destination file in write mode */
+        fp2 = fopen(target, "w");
+
+        /* error handling */
+        if (!fp1) {
+                printf("Unable to open source file to read!!\n");
+                fclose(fp2);
+                return 0;
+        }
+
+        if (!fp2) {
+                printf("Unable to open target file to write\n");
+                return 0;
+        }
+
+        /* copying contents of source file to target file */
+        while ((ch = fgetc(fp1)) != EOF) {
+                fputc(ch, fp2);
+        }
+
+        /* closing the opened files */
+        fclose(fp1);
+        fclose(fp2);
+
+        /* removing the source file */
+        remove(source);
+        return 0;
+  }
+
+move();
+
+}               
+                     
+                          
+}
+
+}
+}                     
+
+
+
 
 
 
